@@ -1,8 +1,7 @@
 import { Post, PostListResponse } from "@/types/Post";
 import { PostType } from "@/types/PostType";
 
-export const API_BASE_URL =
-    process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5144/api/";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5144/api/";
 
 export class ApiError extends Error {
     status: number;
