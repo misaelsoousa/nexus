@@ -1,3 +1,4 @@
+import type { ChildrenProps } from "@/types/UI";
 import Link from "next/link";
 import { getPostsByType } from "@/lib/api";
 import { getPostStatusLabel, type PostListResponse } from "@/types/Post";

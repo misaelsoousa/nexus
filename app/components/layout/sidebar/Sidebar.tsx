@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import siteLogo from "@/app/assets/img/logo.webp";
 import {
   DashboardIcon,
@@ -13,94 +14,134 @@ import {
   MenuIcon,
   PagesIcon,
   ThemeIcon,
+  CloseIcon,
 } from "../../ui/Icons";
 import SidebarLink from "./SidebarLink";
-import type { PostType } from "@/types/PostType";
+import type { SidebarProps } from "@/types/Sidebar";
 
-export default function Sidebar({ postTypes }: { postTypes: PostType[] }) {
+export default function Sidebar({ postTypes }: SidebarProps) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const openButton = useRef<HTMLButtonElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+
+  function closeMenu() {
+    setMobileOpen(false);
+    if (mobileOpen) openButton.current?.focus();
+  }
+
     const user = {
-      name: "John Doe",
+      name: "Usuario padrão",
       role: "Administrator"
     };
 
     const site = {
-      name: "Example Site",
+      name: "teste",
       logoUrl: siteLogo
     }
 
+  useEffect(() => {
+    if (mobileOpen) closeButton.current?.focus();
+  }, [mobileOpen]);
+
   return (
-    <aside className="flex justify-between flex-col w-77.5 sticky m-1 h-[calc(100dvh-8px)] text-gray-100 p-6 bg-darker-blue rounded-3xl">
-      <div className="absolute top-20 -right-2 flex items-center justify-center h-6 w-6 p-1 bg-light-blue rounded-full mb-6 hover:cursor-pointer hover:scale-105 transition-transform" aria-label="Minimize sidebar">
-        <ArrowIcon />
-      </div>
-      <nav className="flex-1 min-h-0 overflow-y-auto py-4 overflow-hidden">
-        <div className="flex flex-col items-center justify-center mb-6">
-          <Image 
-            src={site.logoUrl} 
-            alt={`Logo de ${site.name}`} 
-            width={100} 
-            height={100} 
-            className="max-h-24 max-w-full h-auto w-40 mb-4 object-contain" 
+    <>
+      <button
+        ref={openButton}
+        type="button"
+        onClick={() => setMobileOpen(true)}
+        className="sidebar-toggle"
+      >
+        <MenuIcon className="sidebar-icon" />
+      </button>
+      
+      {mobileOpen && <div onClick={closeMenu} className="sidebar-backdrop" />}
+      
+      <aside
+        className={`sidebar ${mobileOpen ? "sidebar-open" : ""}`}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") closeMenu();
+        }}
+      >
+        <button
+          ref={closeButton}
+          type="button"
+          onClick={closeMenu}
+          className="sidebar-close sidebar-icon-button"
+        >
+          <CloseIcon className="sidebar-icon" />
+        </button>
+        <Link href="/dashboard" onClick={closeMenu} className="sidebar-brand">
+          <Image
+            src={site.logoUrl}
+            alt="Nexus"
+            width={120}
+            height={72}
+            className="sidebar-logo"
           />
-          {/* <Link href="/" className="flex items-center gap-2.5 text-light-blue text-sm w-full">
-            <ArrowLongIcon className="-rotate-45" />
-            <span>{site.name}</span>
-          </Link> */}
-        </div>
-        <ul className="flex flex-col gap-3">
+        </Link>
 
-          <li>
-            <p className="text-xs text-gray-100 opacity-30 uppercase tracking-wider mb-2">Content</p>
+        <nav className="sidebar-navigation">
+          <div className="sidebar-group">
+            <p className="sidebar-heading">Content</p>
 
-            <SidebarLink href="/dashboard">
-              <DashboardIcon className="icon" />
-              Dashboard
-            </SidebarLink>
+            <ul className="sidebar-list">
+              <SidebarLink
+                href="/dashboard"
+                label="Dashboard"
+                icon={<DashboardIcon />}
+                onNavigate={closeMenu}
+              />
+              <SidebarLink
+                href="/posts"
+                label="Posts"
+                icon={<PagesIcon />}
+                subItems={postTypes.map((type) => ({
+                  id: type.id,
+                  label: type.displayName,
+                  href: `/posts?type=${encodeURIComponent(type.name)}`,
+                }))}
+                onNavigate={closeMenu}
+              />
+              <SidebarLink
+                href="/media"
+                label="Media"
+                icon={<MediaIcon />}
+                onNavigate={closeMenu}
+              />
+            </ul>
+          </div>
 
-            <SidebarLink
-              href="/posts"
-              subItems={postTypes.map((postType) => ({
-                id: postType.id,
-                label: postType.displayName,
-                href: `/posts?type=${encodeURIComponent(postType.name)}`,
-              }))}
-            >
-              <PagesIcon className="icon" />
-              Posts
-            </SidebarLink>
+          <div className="sidebar-group">
+            <p className="sidebar-heading">Site</p>
+            <ul className="sidebar-list">
+              <SidebarLink
+                href="/menus"
+                label="Menus"
+                icon={<MenuIcon />}
+                onNavigate={closeMenu}
+              />
+              <SidebarLink
+                href="/themes"
+                label="Themes"
+                icon={<ThemeIcon />}
+                onNavigate={closeMenu}
+              />
+              <SidebarLink
+                href="/users"
+                label="Users"
+                icon={<UserIcon />}
+                onNavigate={closeMenu}
+              />
+              <SidebarLink
+                href="/settings"
+                label="Settings"
+                icon={<SettingsIcon />}
+                onNavigate={closeMenu}
+              />
+            </ul>
+          </div>
+        </nav>
 
-            <SidebarLink href="/media">
-              <MediaIcon className="icon" />
-              Media
-            </SidebarLink>
-          </li>
-
-          <li>
-            <p className="text-xs text-gray-100 opacity-30 uppercase tracking-wider mb-2">website</p>
-
-            <SidebarLink href="/menus">
-              <MenuIcon className="icon" />
-              Menus
-            </SidebarLink>
-
-            <SidebarLink href="/themes">
-              <ThemeIcon className="icon" />
-                Themes
-            </SidebarLink>
-
-            <SidebarLink href="/users">
-              <UserIcon className="icon" />
-                Users
-            </SidebarLink>
-
-            <SidebarLink href="/settings">
-              <SettingsIcon className="icon" />
-                Settings
-            </SidebarLink>
-          </li>
-
-        </ul>
-      </nav>
       <div className="flex items-center gap-2 mt-6 -mr-3 p-2.5 rounded-[5px]">
         <Link
           href="/profile"
@@ -120,5 +161,6 @@ export default function Sidebar({ postTypes }: { postTypes: PostType[] }) {
         </Link>
       </div>
     </aside>
+    </>
   );
 }

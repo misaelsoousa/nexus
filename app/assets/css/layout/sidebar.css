@@ -1,29 +1,101 @@
-@import "tailwindcss";
+@layer components {
+  .sidebar {
+    @apply fixed inset-y-0 left-0 z-50 flex h-dvh w-64 shrink-0 flex-col rounded-r-3xl bg-sidebar p-3 text-gray-100 invisible -translate-x-full md:visible md:sticky md:top-0 md:z-20 md:translate-x-0;
+  }
 
-.sidebar-item {
-  @apply transition-[background-color,color,opacity]  duration-300 ease-in-out motion-reduce:transition-none relative isolate flex items-center gap-3 min-h-11.5 my-2 py-3 pr-5 pl-4 rounded-l-md text-sm font-medium cursor-pointer max-[700px]:pl-3 max-[700px]:gap-2;
+  .sidebar-open {
+    @apply visible translate-x-0;
+  }
 
-  .icon {
-    @apply w-5.5 h-5.5;
+  .sidebar-toggle {
+    @apply absolute left-4 top-4 z-20 grid size-10 place-items-center rounded-md text-blue md:hidden;
+  }
+
+  .sidebar-backdrop {
+    @apply fixed inset-0 z-40 bg-black/40 md:hidden;
+  }
+
+  .sidebar-icon-button {
+    @apply grid size-9 shrink-0 place-items-center rounded hover:bg-white/10;
+  }
+
+  .sidebar-close {
+    @apply absolute right-3 top-3 md:hidden;
+  }
+
+  .sidebar-icon,
+  .sidebar-link-icon svg {
+    @apply size-5;
+  }
+
+  .sidebar-link-icon {
+    @apply shrink-0;
+  }
+
+  .sidebar-brand {
+    @apply mb-5 flex h-20 shrink-0 items-center justify-center px-2;
+  }
+
+  .sidebar-logo {
+    @apply h-auto max-h-16 w-auto max-w-full object-contain;
+  }
+
+  .sidebar-navigation {
+    @apply min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-4;
+    scrollbar-width: thin;
+  }
+
+  .sidebar-group+.sidebar-group {
+    @apply mt-6;
+  }
+
+  .sidebar-heading {
+    @apply mb-2 px-3 text-[10px] font-medium uppercase tracking-[0.16em] text-gray-400;
+  }
+
+  .sidebar-list {
+    @apply space-y-1;
+  }
+
+  .sidebar-link {
+    @apply flex min-h-11 items-center gap-3 rounded-md px-3 text-sm text-gray-300 hover:bg-white/5 hover:text-white;
+  }
+
+  .sidebar-link[data-active] {
+    @apply bg-white/7 font-medium text-light-blue;
+  }
+
+  .sidebar-subitems {
+    @apply ml-5 mt-1 grid gap-1 border-l border-dashed border-light-blue/15 pl-2;
+  }
+
+  .sidebar-subitem {
+    @apply block rounded px-3 py-2 text-xs leading-relaxed text-gray-300 hover:bg-white/5 hover:text-white;
+  }
+
+  .sidebar-footer {
+    @apply mt-4 flex shrink-0 items-center gap-2 rounded-md p-2;
+  }
+
+  .sidebar-profile {
+    @apply flex min-w-0 flex-1 items-center gap-2.5 rounded;
+  }
+
+  .sidebar-avatar {
+    @apply grid size-9 shrink-0 place-items-center rounded-full bg-sidebar text-xs;
+  }
+
+  .sidebar-user-name {
+    @apply text-xs font-semibold;
+  }
+
+  .sidebar-user-role {
+    @apply mt-0.5 text-[11px] text-gray-300;
   }
 }
 
-.sidebar-item:hover {
-  @apply bg-[#ffffff0a] text-white;
-}
-
-.sidebar-item[data-active] {
-  @apply text-light-blue font-bold opacity-100 cursor-pointer bg-[#ffffff0a];
-} 
-
-.sidebar-item[data-active] svg {
-  @apply text-light-blue;
-}
-
-.sidebar-item-background {
-  @apply absolute inset-0 -z-10 origin-right scale-x-0 rounded-l-full bg-blue pointer-events-none transition-transform duration-300 ease-in-out motion-reduce:transition-none;
-}
-
-.sidebar-subitem {
-  @apply relative after:content-[''] after:absolute after:-left-2.5 after:top-1/2 after:transform after:-translate-y-1/2 after:size-1 after:rounded-full after:bg-light-blue;
+@media (max-width: 767px) {
+  body:has(.sidebar-open) {
+    overflow: hidden;
+  }
 }
