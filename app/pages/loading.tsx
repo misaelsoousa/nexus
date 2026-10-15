@@ -1,0 +1,10 @@
+import { HeaderSkeleton, SkeletonPage, TableSkeleton } from "../components/skeletons";
+
+export default function Loading() {
+    return (
+        <SkeletonPage>
+            <HeaderSkeleton action description />
+            <TableSkeleton columns={["", "hidden sm:table-cell", "hidden md:table-cell [&>div]:ml-auto", "hidden lg:table-cell"]} rows={4} />
+        </SkeletonPage>
+    );
+}
