@@ -176,6 +176,18 @@
   --shadow-float: var(--shadow-lg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Tokens usados pelos componentes do dashboard/sidebar (app/dashboard, app/components/ui, app/components/layout). */
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-light-background: #f3f4f4;
+  --color-gray: var(--surface-3);
+  --color-light-gray: var(--surface);
+  --color-sidebar: var(--bar);
+  --color-sidebar-raised: var(--bar-hover);
+  --color-light-blue: #6ccbd1;
+  --color-blue: #24303c;
+  --color-darker-blue: #1b2530;
 }
 
 html {
